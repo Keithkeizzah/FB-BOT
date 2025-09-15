@@ -12,23 +12,7 @@ const PORT = 3000;
 const botPrefix = config.prefix || ".";
 const cooldowns = new Map();
 
-global.events = new Map();
 global.commands = new Map();
-
-const loadEvents = () => {
-    try {
-        const files = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
-        for (const file of files) {
-            const event = require(`./events/${file}`);
-            if (event.name && event.execute) {
-                global.events.set(event.name, event);
-                console.log(`✅ Loaded event: ${event.name}`);
-            }
-        }
-    } catch (err) {
-        console.error("❌ Error loading events:", err);
-    }
-};
 
 const loadCommands = () => {
     try {
@@ -87,10 +71,6 @@ const startBot = () => {
                 console.log("🤖 Bot is now online!");
                 api.sendMessage("🤖 Bot has started successfully!", config.ownerID);
 
-                global.events.forEach((handler) => {
-                    if (handler.onStart) handler.onStart(api);
-                });
-
                 api.listenMqtt(async (err, event) => {
                     if (err) {
                         console.error("❌ Event error:", err);
@@ -98,10 +78,6 @@ const startBot = () => {
                     }
 
                     try {
-                        if (global.events.has(event.type)) {
-                            await global.events.get(event.type).execute({ api, event });
-                        }
-
                         const urlRegex = /(https?:\/\/[^\s]+)/gi;
                         if (event.body && urlRegex.test(event.body)) {
                             const urlCommand = global.commands.get("url");
@@ -188,6 +164,5 @@ process.on("uncaughtException", (err) => {
     console.error("❌ Uncaught Exception:", err);
 });
 
-loadEvents();
 loadCommands();
 startBot();
