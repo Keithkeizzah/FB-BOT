@@ -6,7 +6,7 @@ if (fs.existsSync('set.env')) {
     require('dotenv').config({ path: __dirname + '/set.env' });
 }
 
-let appStateValue = process.env.APPSTATE || '[]';
+let appStateValue = process.env.APPSTATE || '';
 try {
     appStateValue = JSON.parse(appStateValue);
 } catch (e) {
