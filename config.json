@@ -1,0 +1,16 @@
+{
+  "prefix": ".",
+  "ownerID": "100095180674234",
+  "autoRestart": false,
+  "autoGreet": false,
+  "option": {
+    "forceLogin": true,
+    "listenEvents": true,
+    "logLevel": "error",
+    "selfListen": true,
+    "updatePresence": true,
+    "autoMarkDelivery": true,
+    "autoMarkRead": true,
+    "online": true
+  }
+}
