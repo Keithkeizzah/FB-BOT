@@ -1,5 +1,5 @@
 {
-  "name": "fbot",
+  "name": "FB-BOT",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,7 @@
     "@xaviabot/fb-downloader": "^1.0.14",
     "axios": "^1.8.3",
     "express": "^4.21.2",
+     "dotenv": "^16.3.1",
     "fs-extra": "^11.3.0",
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2",
@@ -23,10 +24,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/magi17/Fbot-V1.3.git"
+    "url": "git+https://github.com/keithkeizzah/FB-BOT.git"
   },
   "bugs": {
-    "url": "https://github.com/magi17/Fbot-V1.3/issues"
+    "url": "https://github.com/keithkeizzah/FB-BOT/issues"
   },
-  "homepage": "https://github.com/magi17/Fbot-V1.3#readme"
+  "homepage": "https://github.com/keithkeizzah/FB-BOT#readme"
 }
