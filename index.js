@@ -3,24 +3,13 @@ const path = require("path");
 const express = require("express");
 const login = require("ws3-fca");
 
+// Load environment variables from set.js
+const config = require("./set.js");
+
 const app = express();
 const PORT = 3000;
 
-const loadConfig = (filePath) => {
-    try {
-        if (!fs.existsSync(filePath)) {
-            console.error(`❌ Missing ${filePath}!`);
-            process.exit(1);
-        }
-        return JSON.parse(fs.readFileSync(filePath));
-    } catch (error) {
-        console.error(`❌ Error loading ${filePath}:`, error);
-        process.exit(1);
-    }
-};
-
-const config = loadConfig("./config.json");
-const botPrefix = config.prefix || "/";
+const botPrefix = config.prefix || ".";
 const cooldowns = new Map();
 
 global.events = new Map();
@@ -64,11 +53,19 @@ app.listen(PORT, () => {
     console.log(`🌐 Web Server running at http://localhost:${PORT}`);
 });
 
-const appState = loadConfig("./appState.json");
 const detectedURLs = new Set();
 
 const startBot = () => {
     try {
+        // Parse appState from environment variable
+        let appState;
+        try {
+            appState = JSON.parse(config.appstate);
+        } catch (e) {
+            console.error("❌ Invalid APPSTATE format. It should be a valid JSON string.");
+            process.exit(1);
+        }
+
         login({ appState }, (err, api) => {
             if (err) {
                 console.error("❌ Login failed:", err);
@@ -77,7 +74,16 @@ const startBot = () => {
 
             try {
                 console.clear();
-                api.setOptions(config.option);
+                
+                // Set options from config
+                api.setOptions({
+                    listenEvents: config.listenEvents === 'true',
+                    updatePresence: config.updatePresence === 'true',
+                    forceLogin: config.forceLogin === 'true',
+                    autoMarkRead: config.autoMarkRead === 'true',
+                    autoMarkDelivery: config.autoMarkDelivery === 'true'
+                });
+                
                 console.log("🤖 Bot is now online!");
                 api.sendMessage("🤖 Bot has started successfully!", config.ownerID);
 
